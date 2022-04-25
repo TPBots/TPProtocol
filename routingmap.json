@@ -1,0 +1,225 @@
+{
+    "netroles": {
+        "robotclient":{
+            "lang": "c++",
+            "ip": "",
+            "port": "",
+            "os": "",
+            "hardware": ""
+        },
+        "uiclient":{
+            "lang": "js",
+            "ip": "",
+            "port": "",
+            "os": "",
+            "hardware": ""
+        },
+        "siteserver":{
+            "lang": "js",
+            "ip": "",
+            "port": "",
+            "os": "",
+            "hardware": ""
+        },
+        "registryserver":{
+            "lang": "js",
+            "ip": "",
+            "port": "",
+            "os": "",
+            "hardware": ""
+        },
+        "videostreamserver":{
+            "lang": "js",
+            "ip": "",
+            "port": "",
+            "os": "",
+            "hardware": ""
+        },
+        "commandstreamserver":{
+            "lang": "js",
+            "ip": "",
+            "port": "",
+            "os": "",
+            "hardware": ""
+        },
+        "audiostreamserver":{
+            "lang": "js",
+            "ip": "",
+            "port": "",
+            "os": "",
+            "hardware": ""
+        }
+    },
+
+
+    "routes":[
+
+        {
+            "route":"/",
+            "protocol": "http",
+            "verb": "GET",
+            "netroles": {
+                "siteserver": {
+                    "procedures":[
+                        "serverHtmlApp"
+                    ]
+                }
+            }
+        },
+
+        {
+            "route": "/onerror",
+            "protocol": "http",
+            "verb": "DELETE",
+            "netroles": {
+                "registryserver": {
+                    "procedures":["deleteSocketPairs"]
+                },
+                "commandstreamserver": {
+                    "procedures":["deleteSocketPairs"]
+                },
+                "videostreamserver": {
+                    "procedures":["deleteSocketPairs"]
+                },
+                "audiostreamserver": {
+                    "procedures":["deleteSocketPairs"]
+                }
+            }
+        },
+
+        {
+            "route": "/robotregister",
+            "protocol": "http",
+            "verb": "GET",
+            "netroles":{
+                "robotclient": {
+                    "procedures":["pingRegistry"]
+                },
+                "registryserver":{
+                    "procedures":[
+                        "registerRobot"
+                    ]
+                },
+                "videostreamserver": {
+                    "procedures": [
+                        "registerRobot"
+                    ]
+                },
+                "commandstreamserver": {
+                    "procedures": [
+                        "registerRobot"
+                    ]
+                },
+                "audiostreamserver":{
+                    "procedures": [
+                        "registerRobot"
+                    ]
+                }
+            }
+        },
+
+        {
+            "route": "/uiregister",
+            "protocol": "http",
+            "verb": "GET",
+            "netroles":{
+                "registryserver":{
+                    "procedures":[
+                        "registerUI"
+                    ]
+                },
+                "videostreamserver": {
+                    "procedures": [
+                        "registerUI"
+                    ]
+                },
+                "commandstreamserver": {
+                    "procedures": [
+                        "registerUI"
+                    ]
+                },
+                "audiostreamserver": {
+                    "procedures": [
+                        "registerUI"
+                    ]
+                }
+            }
+        },
+
+        {
+            "route": "/unregister",
+            "protocol": "http",
+            "verb": "DELETE",
+            "netroles":{
+                "registryserver":{
+                    "procedures":[
+                        "unregister"
+                    ]
+                },
+                "videostreamserver": {
+                    "procedures": [
+                        "unregister"
+                    ]
+                },
+                "commandstreamserver": {
+                    "procedures": [
+                        "unregister"
+                    ]
+                },
+                "audiostreamserver": {
+                    "procedures": [
+                        "unregister"
+                    ]
+                }
+            }
+        },
+        {
+            "route": "/streamvideo",
+            "protocol": "ws",
+            "verb": "POST",
+            "netroles":{
+                "uiclient": {
+                    "procedures":["streamPlayVideo"]
+                },
+                "videostreamserver": {
+                    "procedures":["relayVideoBinary"]
+                },
+                "robotclient": {
+                    "procedures":["sendVideoBinary"]
+                }
+            }
+        },
+        {
+            "route": "/streamcommands",
+            "protocol": "ws",
+            "verb": "POST",
+            "netroles": {
+                "uiclient": {
+                    "procedures":["sendCommands"]
+                },
+                "videostreamserver": {
+                    "procedures":["relayCommands"]
+                },
+                "robotclient": {
+                    "procedures":["executeCommands"]
+                }
+            }
+        },
+        {
+            "route": "/streamaudio",
+            "protocol": "ws",
+            "verb": "POST",
+            "netroles": {
+                "uiclient": {
+                    "procedures":["streamPlayAudio"]
+                },
+                "videostreamserver": {
+                    "procedures":["relayAudio"]
+                },
+                "robotclient": {
+                    "procedures":["sendAudio"]
+                }
+            }
+        }
+    ]
+}
